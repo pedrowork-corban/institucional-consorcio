@@ -1,0 +1,1345 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MAIS BB Consórcios | Martinelle & Avelar – Correspondente Banco do Brasil</title>
+  <meta name="description" content="Consórcios de imóveis, veículos, máquinas agrícolas e serviços. 17 anos de mercado, correspondente autorizado Banco do Brasil. Simule grátis!">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Inter+Tight:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --azul: #0038A8;
+      --azul-dark: #002275;
+      --azul-mid: #0046cc;
+      --amarelo: #F2CE1B;
+      --amarelo-dark: #d4b010;
+      --branco: #FFFFFF;
+      --cinza: #F4F4F6;
+      --cinza-2: #e0e0e8;
+      --texto: #1A1A1A;
+      --muted: #6b7280;
+      --radius: 12px;
+      --radius-lg: 20px;
+      --shadow: 0 4px 20px rgba(0,56,168,0.1);
+      --shadow-lg: 0 16px 48px rgba(0,56,168,0.16);
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter Tight', sans-serif;
+      color: var(--texto);
+      background: var(--branco);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ─── ANIMATIONS ─── */
+    @keyframes fadeInUp   { from { opacity:0; transform:translateY(30px) } to { opacity:1; transform:translateY(0) } }
+    @keyframes fadeInLeft { from { opacity:0; transform:translateX(-30px)} to { opacity:1; transform:translateX(0) } }
+    @keyframes fadeInRight{ from { opacity:0; transform:translateX(30px) } to { opacity:1; transform:translateX(0) } }
+    @keyframes float      { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+    @keyframes pulse-ring { 0%{transform:scale(1);opacity:.6} 100%{transform:scale(1.5);opacity:0} }
+    @keyframes spin       { to{transform:rotate(360deg)} }
+    @keyframes shimmer    { 0%{background-position:-200% center} 100%{background-position:200% center} }
+    @keyframes countIn    { from{opacity:0;transform:scale(.8)} to{opacity:1;transform:scale(1)} }
+    @keyframes slideDown  { from{opacity:0;transform:translateY(-12px)} to{opacity:1;transform:translateY(0)} }
+    @keyframes barGrow    { from{width:0} to{width:var(--w)} }
+
+    .anim { opacity:0; transform:translateY(36px); transition:opacity .7s ease, transform .7s ease; }
+    .anim.from-left  { transform:translateX(-36px); }
+    .anim.from-right { transform:translateX(36px); }
+    .anim.visible    { opacity:1; transform:translate(0,0); }
+    .anim.delay-1    { transition-delay:.1s }
+    .anim.delay-2    { transition-delay:.2s }
+    .anim.delay-3    { transition-delay:.3s }
+    .anim.delay-4    { transition-delay:.4s }
+
+    /* ─── NAVBAR ─── */
+    nav {
+      position: fixed; top:0; left:0; right:0; z-index:900;
+      padding: 18px 48px;
+      display: flex; align-items:center; justify-content:space-between;
+      transition: var(--transition);
+    }
+    nav.scrolled {
+      background: rgba(0,34,117,.97);
+      backdrop-filter: blur(12px);
+      padding: 12px 48px;
+      box-shadow: 0 4px 24px rgba(0,0,0,.25);
+    }
+    .nav-logo { display:flex; align-items:center; gap:10px; text-decoration:none; }
+    .nav-logo-mark {
+      width:38px; height:38px; background:var(--amarelo);
+      border-radius:8px; display:flex; align-items:center; justify-content:center;
+      font-family:'DM Serif Display',serif; font-size:1rem; color:var(--azul); font-weight:700;
+    }
+    .nav-logo-text {
+      font-family:'DM Serif Display',serif; font-size:1.45rem;
+      color:#fff; letter-spacing:-.3px;
+    }
+    .nav-logo-text span { color:var(--amarelo); }
+    .nav-links { display:flex; align-items:center; gap:4px; list-style:none; }
+    .nav-links a {
+      color:rgba(255,255,255,.85); text-decoration:none;
+      font-size:.88rem; font-weight:500; padding:8px 14px;
+      border-radius:8px; transition:var(--transition); cursor:pointer;
+    }
+    .nav-links a:hover { color:var(--amarelo); background:rgba(255,255,255,.08); }
+    .nav-cta {
+      background:var(--amarelo) !important; color:var(--azul) !important;
+      font-weight:800 !important; padding:10px 22px !important;
+      border-radius:50px !important; letter-spacing:.3px;
+    }
+    .nav-cta:hover { background:var(--amarelo-dark)!important; transform:translateY(-2px); box-shadow:0 6px 20px rgba(242,206,27,.4); }
+    .hamburger { display:none; flex-direction:column; gap:5px; cursor:pointer; padding:6px; }
+    .hamburger span { width:22px; height:2px; background:#fff; border-radius:2px; transition:var(--transition); }
+
+    /* Mobile menu */
+    .mobile-nav {
+      position:fixed; inset:0; background:var(--azul-dark); z-index:1800;
+      display:flex; flex-direction:column; align-items:center; justify-content:center; gap:28px;
+      opacity:0; visibility:hidden; transition:var(--transition);
+    }
+    .mobile-nav.open { opacity:1; visibility:visible; }
+    .mobile-nav a {
+      color:#fff; text-decoration:none; font-size:1.5rem;
+      font-weight:700; cursor:pointer; transition:var(--transition);
+    }
+    .mobile-nav a:hover { color:var(--amarelo); }
+    .mob-close {
+      position:absolute; top:20px; right:24px;
+      background:none; border:none; color:#fff; font-size:1.8rem; cursor:pointer;
+    }
+    .mob-cta { background:var(--amarelo); color:var(--azul)!important; padding:12px 28px; border-radius:50px; font-size:1rem!important; }
+
+    /* ─── HERO ─── */
+    #hero {
+      min-height:100vh;
+      background: linear-gradient(140deg, #001655 0%, #002fa0 45%, #0050d4 100%);
+      position:relative; display:flex; align-items:center; overflow:hidden;
+      padding:130px 48px 80px;
+    }
+    .hero-bg-pattern {
+      position:absolute; inset:0; pointer-events:none; overflow:hidden;
+    }
+    .hero-bg-pattern::before {
+      content:''; position:absolute;
+      top:-200px; right:-200px;
+      width:700px; height:700px;
+      border-radius:50%;
+      background:radial-gradient(circle, rgba(242,206,27,.12) 0%, transparent 70%);
+    }
+    .hero-bg-pattern::after {
+      content:''; position:absolute;
+      bottom:-150px; left:-150px;
+      width:500px; height:500px;
+      border-radius:50%;
+      background:radial-gradient(circle, rgba(255,255,255,.04) 0%, transparent 70%);
+    }
+    .hero-dots {
+      position:absolute; inset:0;
+      background-image: radial-gradient(rgba(255,255,255,.07) 1px, transparent 1px);
+      background-size:32px 32px;
+      pointer-events:none;
+    }
+    .hero-inner {
+      max-width:1240px; margin:0 auto;
+      display:grid; grid-template-columns:1fr 1fr; gap:64px;
+      align-items:center; position:relative; z-index:1; width:100%;
+    }
+    .hero-content { animation: fadeInLeft .9s ease both; }
+    .hero-badge {
+      display:inline-flex; align-items:center; gap:8px;
+      background:rgba(242,206,27,.15); border:1px solid rgba(242,206,27,.35);
+      color:var(--amarelo); padding:7px 16px; border-radius:50px;
+      font-size:.75rem; font-weight:700; letter-spacing:1px;
+      text-transform:uppercase; margin-bottom:24px;
+    }
+    .hero-badge::before { content:'✦'; font-size:.65rem; }
+    .hero-title {
+      font-family:'DM Serif Display',serif;
+      font-size:clamp(2rem,3.6vw,3.4rem);
+      color:#fff; line-height:1.13; margin-bottom:22px;
+    }
+    .hero-title em { color:var(--amarelo); font-style:normal; }
+    .hero-sub {
+      color:rgba(255,255,255,.78); font-size:1.05rem;
+      line-height:1.75; margin-bottom:36px;
+    }
+    .hero-trust { display:flex; flex-wrap:wrap; gap:20px; }
+    .trust-item { display:flex; align-items:center; gap:8px; color:rgba(255,255,255,.7); font-size:.85rem; }
+    .trust-item .ti { color:var(--amarelo); font-size:1rem; }
+
+    /* Hero Form Card */
+    .form-card {
+      background:#fff; border-radius:var(--radius-lg);
+      padding:36px; box-shadow:0 24px 64px rgba(0,0,0,.22);
+      animation: fadeInRight .9s ease .15s both;
+      border-top:4px solid var(--amarelo);
+    }
+    .form-card-title {
+      font-size:1.15rem; font-weight:800; color:var(--azul); margin-bottom:4px;
+    }
+    .form-card-sub { font-size:.82rem; color:var(--muted); margin-bottom:22px; }
+    .fgroup { margin-bottom:14px; }
+    .fgroup label {
+      display:block; font-size:.72rem; font-weight:700;
+      color:var(--texto); margin-bottom:5px;
+      text-transform:uppercase; letter-spacing:.6px;
+    }
+    .fctl {
+      width:100%; padding:11px 14px;
+      border:1.5px solid #dde3ee; border-radius:var(--radius);
+      font-size:.92rem; font-family:'Inter Tight',sans-serif;
+      color:var(--texto); background:#f8fafd;
+      transition:var(--transition); outline:none; appearance:none;
+    }
+    .fctl:focus { border-color:var(--azul); background:#fff; box-shadow:0 0 0 3px rgba(0,56,168,.1); }
+    .fctl.err { border-color:#f43f5e; background:#fff5f7; }
+    .frow { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+    .valor-row { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+    .field-err { color:#f43f5e; font-size:.72rem; margin-top:3px; }
+    .radio-group { display:flex; gap:16px; }
+    .radio-opt { display:flex; align-items:center; gap:6px; cursor:pointer; font-size:.9rem; font-weight:500; }
+    .radio-opt input { accent-color:var(--azul); width:16px; height:16px; cursor:pointer; }
+    .btn-submit {
+      width:100%; padding:15px; margin-top:6px;
+      background:var(--amarelo); color:var(--azul);
+      border:none; border-radius:var(--radius);
+      font-size:.95rem; font-weight:900; letter-spacing:.6px;
+      text-transform:uppercase; font-family:'Inter Tight',sans-serif;
+      cursor:pointer; transition:var(--transition);
+      position:relative; overflow:hidden;
+    }
+    .btn-submit::after {
+      content:''; position:absolute; inset:0;
+      background:linear-gradient(90deg,transparent,rgba(255,255,255,.35),transparent);
+      transform:translateX(-100%); transition:transform .5s ease;
+    }
+    .btn-submit:hover::after { transform:translateX(100%); }
+    .btn-submit:hover { background:var(--amarelo-dark); transform:translateY(-2px); box-shadow:0 8px 24px rgba(242,206,27,.4); }
+    .btn-submit:disabled { opacity:.6; pointer-events:none; }
+    .form-sec { display:flex; align-items:center; justify-content:center; gap:6px; margin-top:10px; font-size:.72rem; color:var(--muted); }
+    .spinner { display:inline-block; width:14px; height:14px; border:2px solid rgba(0,56,168,.25); border-top-color:var(--azul); border-radius:50%; animation:spin .6s linear infinite; vertical-align:middle; margin-right:6px; }
+
+    /* ─── PARTNER STRIP ─── */
+    .partner-strip {
+      background:var(--cinza); padding:24px 48px;
+      display:flex; align-items:center; justify-content:center;
+      flex-wrap:wrap; gap:40px;
+    }
+    .pitem {
+      display:flex; align-items:center; gap:12px;
+      color:var(--azul); font-weight:700; font-size:.9rem;
+    }
+    .picon {
+      width:46px; height:46px; background:var(--azul); border-radius:10px;
+      display:flex; align-items:center; justify-content:center;
+      font-size:1.35rem; flex-shrink:0;
+    }
+    .pitem-div { width:1px; height:36px; background:var(--cinza-2); }
+
+    /* ─── GENERIC SECTION ─── */
+    section { padding:88px 48px; }
+    .cont { max-width:1240px; margin:0 auto; }
+    .s-tag {
+      display:inline-block; background:rgba(0,56,168,.08);
+      color:var(--azul); padding:6px 16px; border-radius:50px;
+      font-size:.72rem; font-weight:700; letter-spacing:1px;
+      text-transform:uppercase; margin-bottom:14px;
+    }
+    .s-title {
+      font-family:'DM Serif Display',serif;
+      font-size:clamp(1.7rem,2.8vw,2.6rem);
+      color:var(--texto); line-height:1.2; margin-bottom:14px;
+    }
+    .s-title span { color:var(--azul); }
+    .s-desc { color:var(--muted); font-size:1rem; line-height:1.75; max-width:580px; }
+
+    /* ─── ABOUT ─── */
+    #sobre { background:#fff; }
+    .about-grid { display:grid; grid-template-columns:1fr 1fr; gap:80px; align-items:center; }
+    .about-visual-card {
+      background:var(--azul); border-radius:var(--radius-lg);
+      padding:36px; color:#fff; position:relative; overflow:hidden;
+    }
+    .about-visual-card::before {
+      content:''; position:absolute; top:-60px; right:-60px;
+      width:240px; height:240px;
+      background:rgba(242,206,27,.12); border-radius:50%;
+      pointer-events:none;
+    }
+    .about-visual-card::after {
+      content:''; position:absolute; bottom:-80px; left:-60px;
+      width:280px; height:280px;
+      background:rgba(255,255,255,.05); border-radius:50%;
+      pointer-events:none;
+    }
+    .av-stat { position:relative; z-index:1; text-align:center; padding:20px 0; border-bottom:1px solid rgba(255,255,255,.12); }
+    .av-stat:last-child { border-bottom:none; }
+    .av-num { font-family:'DM Serif Display',serif; font-size:2.8rem; color:var(--amarelo); line-height:1; }
+    .av-lbl { font-size:.85rem; color:rgba(255,255,255,.75); margin-top:4px; }
+    .about-content p { color:var(--muted); line-height:1.8; margin-bottom:18px; font-size:.97rem; }
+    .about-list { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:22px; }
+    .aitem { display:flex; align-items:center; gap:10px; font-size:.88rem; font-weight:600; color:var(--texto); }
+    .aitem::before {
+      content:'✓'; display:inline-flex; align-items:center; justify-content:center;
+      width:20px; height:20px; background:var(--azul); color:var(--amarelo);
+      border-radius:50%; font-size:.65rem; flex-shrink:0; font-weight:900;
+    }
+
+    /* ─── SERVICES ─── */
+    #servicos { background:var(--cinza); }
+    .services-header { text-align:center; margin-bottom:52px; }
+    .services-header .s-desc { margin:0 auto; }
+    .serv-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:22px; }
+    .scard {
+      background:#fff; border-radius:var(--radius-lg); padding:32px 22px;
+      text-align:center; transition:var(--transition);
+      border:1.5px solid transparent; position:relative; overflow:hidden;
+    }
+    .scard-top-bar {
+      position:absolute; top:0; left:0; right:0; height:4px;
+      background:linear-gradient(90deg,var(--azul),var(--azul-mid));
+      transform:scaleX(0); transform-origin:left; transition:transform .35s ease;
+    }
+    .scard:hover .scard-top-bar { transform:scaleX(1); }
+    .scard:hover { transform:translateY(-8px); box-shadow:var(--shadow-lg); border-color:rgba(0,56,168,.12); }
+    .scard-icon {
+      width:68px; height:68px; background:rgba(0,56,168,.07); border-radius:16px;
+      display:flex; align-items:center; justify-content:center; font-size:2rem;
+      margin:0 auto 18px; transition:var(--transition);
+    }
+    .scard:hover .scard-icon { background:var(--azul); transform:scale(1.08); }
+    .scard h3 { font-size:1rem; font-weight:800; color:var(--texto); margin-bottom:10px; }
+    .scard p { font-size:.83rem; color:var(--muted); line-height:1.65; margin-bottom:20px; }
+    .btn-scard {
+      background:var(--amarelo); color:var(--azul);
+      padding:10px 18px; border-radius:50px;
+      font-size:.78rem; font-weight:800; cursor:pointer;
+      border:none; font-family:'Inter Tight',sans-serif;
+      text-transform:uppercase; letter-spacing:.5px;
+      transition:var(--transition);
+    }
+    .btn-scard:hover { background:var(--azul); color:var(--amarelo); transform:scale(1.04); }
+
+    /* ─── HOW IT WORKS ─── */
+    #como { background:var(--azul); position:relative; overflow:hidden; }
+    #como::before {
+      content:''; position:absolute; inset:0;
+      background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0 L60 30 L30 60 L0 30 Z' fill='none' stroke='%23fff' stroke-opacity='.04' stroke-width='1'/%3E%3C/svg%3E");
+      background-size:48px; pointer-events:none;
+    }
+    #como .s-title { color:#fff; }
+    #como .s-tag { background:rgba(242,206,27,.2); color:var(--amarelo); }
+    #como .s-desc { color:rgba(255,255,255,.7); }
+    .como-head { text-align:center; position:relative; z-index:1; }
+    .steps { display:grid; grid-template-columns:repeat(4,1fr); gap:28px; margin-top:56px; position:relative; z-index:1; }
+    .steps::before {
+      content:''; position:absolute; top:27px; left:12.5%; right:12.5%;
+      height:2px; background:rgba(242,206,27,.25); pointer-events:none;
+    }
+    .step { text-align:center; }
+    .step-num {
+      width:54px; height:54px; background:var(--amarelo); color:var(--azul);
+      border-radius:50%; display:flex; align-items:center; justify-content:center;
+      font-size:1.15rem; font-weight:900; margin:0 auto 20px; position:relative; z-index:1;
+      box-shadow:0 4px 16px rgba(242,206,27,.4);
+    }
+    .step h3 { font-size:.97rem; font-weight:700; color:#fff; margin-bottom:10px; line-height:1.35; }
+    .step p { font-size:.83rem; color:rgba(255,255,255,.68); line-height:1.65; }
+
+    /* ─── AUTHORITY ─── */
+    #autoridade { background:#fff; }
+    .auth-grid { display:grid; grid-template-columns:1fr 1fr; gap:80px; align-items:center; }
+    .stats-2x2 { display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+    .stat-c {
+      background:var(--cinza); border-radius:var(--radius-lg); padding:28px 22px;
+      text-align:center; transition:var(--transition); border:1.5px solid transparent;
+    }
+    .stat-c:hover { border-color:var(--azul); transform:translateY(-4px); box-shadow:var(--shadow); background:#fff; }
+    .stat-c .si { font-size:1.8rem; margin-bottom:10px; }
+    .stat-num { font-family:'DM Serif Display',serif; font-size:2.1rem; color:var(--azul); line-height:1; margin-bottom:6px; }
+    .stat-lbl { font-size:.82rem; color:var(--muted); }
+    .auth-badges { display:flex; flex-direction:column; gap:12px; margin-top:28px; }
+    .abadge {
+      display:flex; align-items:center; gap:14px;
+      background:var(--cinza); padding:16px 20px; border-radius:var(--radius);
+      font-weight:600; font-size:.92rem; transition:var(--transition);
+    }
+    .abadge:hover { background:rgba(0,56,168,.06); transform:translateX(4px); }
+    .abadge .abi {
+      width:42px; height:42px; background:var(--azul); border-radius:10px;
+      display:flex; align-items:center; justify-content:center; font-size:1.2rem; flex-shrink:0;
+    }
+    .auth-cta-wrap { margin-top:32px; }
+    .btn-main {
+      display:inline-block; background:var(--amarelo); color:var(--azul);
+      padding:14px 32px; border-radius:var(--radius); font-weight:900;
+      font-size:.9rem; text-transform:uppercase; letter-spacing:.7px;
+      cursor:pointer; border:none; font-family:'Inter Tight',sans-serif;
+      transition:var(--transition); text-decoration:none;
+    }
+    .btn-main:hover { background:var(--amarelo-dark); transform:translateY(-2px); box-shadow:0 8px 24px rgba(242,206,27,.4); }
+
+    /* ─── FAQ ─── */
+    #faq { background:var(--cinza); }
+    .faq-wrap { display:grid; grid-template-columns:1fr 2fr; gap:80px; align-items:start; }
+    .faq-sticky { position:sticky; top:100px; }
+    .faq-list { display:flex; flex-direction:column; gap:10px; }
+    .fitem { background:#fff; border:1.5px solid #e4e8f0; border-radius:var(--radius); overflow:hidden; transition:var(--transition); }
+    .fitem.open { border-color:var(--azul); box-shadow:var(--shadow); }
+    .fq {
+      padding:17px 20px; font-weight:700; font-size:.92rem;
+      cursor:pointer; display:flex; align-items:center; justify-content:space-between; gap:16px;
+      color:var(--texto); transition:var(--transition);
+    }
+    .fitem.open .fq { color:var(--azul); background:rgba(0,56,168,.03); }
+    .fq-arrow {
+      width:26px; height:26px; background:var(--cinza); border-radius:50%;
+      display:flex; align-items:center; justify-content:center;
+      font-size:.65rem; flex-shrink:0; transition:var(--transition); color:var(--azul);
+    }
+    .fitem.open .fq-arrow { background:var(--azul); color:var(--amarelo); transform:rotate(180deg); }
+    .fa-wrap { max-height:0; overflow:hidden; transition:max-height .4s ease; }
+    .fa-inner { padding:0 20px 17px; color:var(--muted); font-size:.87rem; line-height:1.7; }
+
+    /* ─── FOOTER ─── */
+    footer { background:#060f2e; color:#fff; padding:64px 48px 28px; }
+    .footer-in { max-width:1240px; margin:0 auto; }
+    .footer-top { display:grid; grid-template-columns:1.6fr 1fr 1fr; gap:64px; margin-bottom:56px; }
+    .ftl-brand { font-family:'DM Serif Display',serif; font-size:1.7rem; color:#fff; margin-bottom:12px; }
+    .ftl-brand span { color:var(--amarelo); }
+    .ftl-desc { color:rgba(255,255,255,.55); font-size:.88rem; line-height:1.75; margin-bottom:22px; }
+    .socials { display:flex; gap:10px; }
+    .soc-btn {
+      width:38px; height:38px; background:rgba(255,255,255,.08);
+      border-radius:8px; display:flex; align-items:center; justify-content:center;
+      text-decoration:none; font-size:1rem; transition:var(--transition);
+    }
+    .soc-btn:hover { background:var(--amarelo); }
+    .ft-head { font-size:.72rem; font-weight:800; text-transform:uppercase; letter-spacing:1.2px; color:var(--amarelo); margin-bottom:20px; }
+    .fci { display:flex; align-items:flex-start; gap:10px; margin-bottom:14px; color:rgba(255,255,255,.65); font-size:.87rem; }
+    .fci .fi { margin-top:1px; flex-shrink:0; }
+    .fci a { color:rgba(255,255,255,.65); text-decoration:none; }
+    .fci a:hover { color:var(--amarelo); }
+    .btn-footer-cta {
+      display:block; width:100%; background:var(--amarelo); color:var(--azul);
+      padding:13px 18px; border-radius:var(--radius); font-weight:900;
+      font-size:.82rem; text-align:center; cursor:pointer;
+      border:none; font-family:'Inter Tight',sans-serif;
+      transition:var(--transition); text-transform:uppercase; letter-spacing:.5px;
+      margin-bottom:18px;
+    }
+    .btn-footer-cta:hover { background:var(--amarelo-dark); transform:translateY(-2px); }
+    .footer-map { border-radius:var(--radius); overflow:hidden; margin-top:14px; }
+    .footer-divider { border:none; border-top:1px solid rgba(255,255,255,.08); margin-bottom:22px; }
+    .footer-bot { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; }
+    .footer-copy { color:rgba(255,255,255,.32); font-size:.75rem; }
+
+    /* ─── WHATSAPP ─── */
+    .wa-float {
+      position:fixed; bottom:28px; right:28px; z-index:800;
+      width:58px; height:58px; background:#25D366; border-radius:50%;
+      display:flex; align-items:center; justify-content:center;
+      text-decoration:none; font-size:1.7rem;
+      box-shadow:0 8px 24px rgba(37,211,102,.4);
+      animation:float 3s ease-in-out infinite;
+    }
+    .wa-float:hover { animation:none; transform:scale(1.12); }
+    .wa-ring {
+      position:absolute; inset:-8px; border-radius:50%;
+      background:rgba(37,211,102,.3);
+      animation:pulse-ring 2s ease-out infinite;
+    }
+
+    /* ─── MODALS ─── */
+    .modal-bg {
+      position:fixed; inset:0; background:rgba(0,0,0,.62);
+      z-index:2000; display:flex; align-items:center; justify-content:center;
+      padding:20px; opacity:0; visibility:hidden; transition:var(--transition);
+    }
+    .modal-bg.open { opacity:1; visibility:visible; }
+    .modal-box {
+      background:#fff; border-radius:var(--radius-lg); padding:40px;
+      max-width:520px; width:100%; max-height:92vh; overflow-y:auto;
+      transform:scale(.92) translateY(20px); transition:var(--transition);
+      border-top:4px solid var(--amarelo);
+    }
+    .modal-bg.open .modal-box { transform:scale(1) translateY(0); }
+    .modal-head { display:flex; align-items:center; justify-content:space-between; margin-bottom:22px; }
+    .modal-head h2 { font-size:1.1rem; font-weight:800; color:var(--azul); }
+    .m-close {
+      width:32px; height:32px; background:var(--cinza); border:none;
+      border-radius:50%; cursor:pointer; display:flex; align-items:center; justify-content:center;
+      font-size:1.1rem; color:var(--muted); transition:var(--transition);
+    }
+    .m-close:hover { background:var(--azul); color:#fff; }
+
+    /* Contact Modal */
+    .clist { display:flex; flex-direction:column; gap:12px; }
+    .ci {
+      display:flex; align-items:center; gap:14px;
+      background:var(--cinza); padding:14px 16px; border-radius:var(--radius);
+    }
+    .ci .cci {
+      width:42px; height:42px; background:var(--azul); border-radius:10px;
+      display:flex; align-items:center; justify-content:center; font-size:1.2rem; flex-shrink:0;
+    }
+    .ci .ccl { font-size:.72rem; color:var(--muted); font-weight:700; text-transform:uppercase; letter-spacing:.5px; }
+    .ci .ccv { font-size:.9rem; font-weight:600; color:var(--texto); }
+    .ci .ccv a { color:inherit; text-decoration:none; }
+    .ci .ccv a:hover { color:var(--azul); }
+    .cta-modal { display:block; width:100%; background:var(--amarelo); color:var(--azul); padding:14px; border-radius:var(--radius); font-weight:900; font-size:.88rem; text-align:center; cursor:pointer; border:none; font-family:'Inter Tight',sans-serif; text-transform:uppercase; letter-spacing:.6px; transition:var(--transition); margin-top:20px; }
+    .cta-modal:hover { background:var(--amarelo-dark); transform:translateY(-2px); }
+
+    /* Toast */
+    .toast {
+      position:fixed; bottom:20px; left:50%; transform:translateX(-50%) translateY(80px);
+      background:#1a1a2e; color:#fff; padding:12px 24px; border-radius:50px;
+      font-size:.85rem; font-weight:600; z-index:9999;
+      transition:transform .4s cubic-bezier(.4,0,.2,1); white-space:nowrap;
+      pointer-events:none;
+    }
+    .toast.show { transform:translateX(-50%) translateY(0); }
+    .toast.ok { background:#059669; }
+    .toast.err { background:#e11d48; }
+
+    /* ─── RESPONSIVE ─── */
+    @media(max-width:1024px){
+      .serv-grid { grid-template-columns:repeat(2,1fr); }
+      .steps { grid-template-columns:repeat(2,1fr); }
+      .steps::before { display:none; }
+      .about-grid, .auth-grid { gap:48px; }
+    }
+    @media(max-width:768px){
+      nav, nav.scrolled { padding:14px 20px; }
+      .nav-links { display:none; }
+      .hamburger { display:flex; }
+      #hero { padding:100px 20px 56px; }
+      .hero-inner { grid-template-columns:1fr; gap:36px; }
+      .hero-title { font-size:1.9rem; }
+      .form-card { padding:24px; }
+      .about-grid, .auth-grid, .faq-wrap { grid-template-columns:1fr; gap:36px; }
+      .serv-grid { grid-template-columns:1fr 1fr; }
+      .steps { grid-template-columns:1fr 1fr; }
+      .stats-2x2 { grid-template-columns:1fr 1fr; }
+      .frow, .valor-row { grid-template-columns:1fr; }
+      section { padding:60px 20px; }
+      footer { padding:48px 20px 24px; }
+      .footer-top { grid-template-columns:1fr; gap:36px; }
+      .footer-bot { flex-direction:column; text-align:center; }
+      .partner-strip { padding:20px; gap:20px; }
+      .modal-box { padding:24px; }
+      .faq-sticky { position:static; }
+      .about-list { grid-template-columns:1fr; }
+    }
+    @media(max-width:480px){
+      .serv-grid { grid-template-columns:1fr; }
+      .steps { grid-template-columns:1fr; }
+      .stats-2x2 { grid-template-columns:1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ─── NAVBAR ─── -->
+<nav id="navbar">
+  <a class="nav-logo" href="#hero">
+    <div class="nav-logo-mark">M</div>
+    <span class="nav-logo-text">MAIS <span>BB</span></span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#hero">Início</a></li>
+    <li><a href="#sobre">Sobre nós</a></li>
+    <li><a href="#servicos">Serviços</a></li>
+    <li><a onclick="openContactModal()">Contatos</a></li>
+    <li><a class="nav-cta" href="#hero" onclick="focusHeroForm(event)">Fazer simulação</a></li>
+  </ul>
+  <div class="hamburger" onclick="openMobileMenu()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- Mobile Menu -->
+<div class="mobile-nav" id="mobileNav">
+  <button class="mob-close" onclick="closeMobileMenu()">✕</button>
+  <a href="#hero" onclick="closeMobileMenu()">Início</a>
+  <a href="#sobre" onclick="closeMobileMenu()">Sobre nós</a>
+  <a href="#servicos" onclick="closeMobileMenu()">Serviços</a>
+  <a onclick="closeMobileMenu();openContactModal()">Contatos</a>
+  <a class="mob-cta" href="#hero" onclick="closeMobileMenu();focusHeroForm(event)">Fazer Simulação</a>
+</div>
+
+<!-- ─── HERO ─── -->
+<section id="hero">
+  <div class="hero-bg-pattern"></div>
+  <div class="hero-dots"></div>
+  <div class="hero-inner">
+    <div class="hero-content">
+      <div class="hero-badge">Correspondente Autorizado Banco do Brasil</div>
+      <h1 class="hero-title">
+        Sonhar é bom.<br><em>Realizar é mais ainda.</em><br>
+        Descubra o consórcio ideal para você.
+      </h1>
+      <p class="hero-sub">
+        Preencha o formulário e receba uma simulação personalizada do seu consórcio, com transparência, segurança e de forma simples, rápida e 100% online.
+      </p>
+      <div class="hero-trust">
+        <div class="trust-item"><span class="ti">🔐</span> 100% Seguro</div>
+        <div class="trust-item"><span class="ti">⚡</span> Resposta Rápida</div>
+        <div class="trust-item"><span class="ti">🏆</span> 17 Anos de Mercado</div>
+        <div class="trust-item"><span class="ti">✓</span> Sem Juros</div>
+      </div>
+    </div>
+
+    <!-- HERO FORM -->
+    <div class="form-card">
+      <div class="form-card-title">Simule seu consórcio grátis</div>
+      <div class="form-card-sub">Sem compromisso. Receba sua simulação pelo WhatsApp.</div>
+      <form id="heroForm" onsubmit="handleSubmit(event,'heroForm')">
+        <div class="fgroup">
+          <label>Nome completo *</label>
+          <input class="fctl" id="h_nome" type="text" placeholder="Seu nome" required>
+        </div>
+        <div class="frow">
+          <div class="fgroup">
+            <label>E-mail *</label>
+            <input class="fctl" id="h_email" type="email" placeholder="seu@email.com" required>
+          </div>
+          <div class="fgroup">
+            <label>Telefone (DDD + Número) *</label>
+            <input class="fctl" id="h_tel" type="tel" placeholder="(31) 99999-9999" required>
+          </div>
+        </div>
+        <div class="fgroup">
+          <label>Tipo de bem *</label>
+          <select class="fctl" id="h_tipo" required>
+            <option value="">Selecione o tipo de bem</option>
+            <option value="Imóvel">🏠 Imóvel</option>
+            <option value="Carro">🚗 Carro</option>
+            <option value="Moto">🏍️ Moto</option>
+            <option value="Veículo Pesado / Caminhão">🚛 Veículo Pesado / Caminhão</option>
+            <option value="Máquina Agrícola">🚜 Máquina Agrícola</option>
+            <option value="Serviço">💡 Serviço</option>
+          </select>
+        </div>
+        <div class="valor-row">
+          <div class="fgroup">
+            <label>O que deseja simular? *</label>
+            <select class="fctl" id="h_valor_tipo" required>
+              <option value="">Selecione</option>
+              <option value="Valor do bem">Valor do bem</option>
+              <option value="Valor da prestação">Valor da prestação</option>
+            </select>
+          </div>
+          <div class="fgroup">
+            <label>Valor desejado (R$) *</label>
+            <input class="fctl" id="h_valor" type="text" placeholder="Ex: R$ 150.000" required oninput="maskMoney(this)">
+          </div>
+        </div>
+        <div class="fgroup">
+          <label>Possui recurso disponível para lance?</label>
+          <div class="radio-group">
+            <label class="radio-opt"><input type="radio" name="h_lance" value="Sim"> Sim</label>
+            <label class="radio-opt"><input type="radio" name="h_lance" value="Não" checked> Não</label>
+          </div>
+        </div>
+        <button class="btn-submit" type="submit" id="heroBtn">
+          🚀 FAZER SIMULAÇÃO GRÁTIS
+        </button>
+        <div class="form-sec">🔒 Seus dados estão seguros conosco</div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ─── PARTNER STRIP ─── -->
+<div class="partner-strip">
+  <div class="pitem">
+    <div class="picon">🏦</div>
+    <div>
+      <div style="font-size:.72rem;color:#666;font-weight:600;text-transform:uppercase;letter-spacing:.5px">Correspondente Credenciado</div>
+      <div>Banco do Brasil</div>
+    </div>
+  </div>
+  <div class="pitem-div"></div>
+  <div class="pitem">
+    <div class="picon" style="background:var(--amarelo);color:var(--azul)">✓</div>
+    <div>
+      <div style="font-size:.72rem;color:#666;font-weight:600;text-transform:uppercase;letter-spacing:.5px">Autorizado pelo</div>
+      <div>Banco Central do Brasil</div>
+    </div>
+  </div>
+  <div class="pitem-div"></div>
+  <div class="pitem">
+    <div class="picon">🏆</div>
+    <div>
+      <div style="font-size:.72rem;color:#666;font-weight:600;text-transform:uppercase;letter-spacing:.5px">Atuação no Mercado</div>
+      <div>Desde 2007</div>
+    </div>
+  </div>
+  <div class="pitem-div"></div>
+  <div class="pitem">
+    <div class="picon" style="background:#059669">💰</div>
+    <div>
+      <div style="font-size:.72rem;color:#666;font-weight:600;text-transform:uppercase;letter-spacing:.5px">Volume Vendido</div>
+      <div>+100 milhões</div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── ABOUT ─── -->
+<section id="sobre">
+  <div class="cont">
+    <div class="about-grid">
+      <div class="anim from-left">
+        <div class="about-visual-card">
+          <div class="av-stat"><div class="av-num counter" data-target="17">0</div><div class="av-lbl">Anos de Experiência</div></div>
+          <div class="av-stat"><div class="av-num">+100<span style="font-size:1.6rem">Mi</span></div><div class="av-lbl">em Consórcios Vendidos</div></div>
+          <div class="av-stat"><div class="av-num">100<span style="font-size:1.4rem">%</span></div><div class="av-lbl">Online e Seguro</div></div>
+        </div>
+      </div>
+      <div class="anim from-right">
+        <span class="s-tag">Sobre a Empresa</span>
+        <h2 class="s-title">Martinelle & Avelar — <span>especialistas</span> em consórcio</h2>
+        <p>A Martinelle & Avelar é especialista em consórcios, com 17 anos de atuação no mercado, ajudando clientes a conquistarem seus objetivos com segurança, planejamento e inteligência financeira.</p>
+        <p>Somos correspondentes autorizados do Banco do Brasil, operando com alto padrão de conformidade, transparência e profissionalismo — fatores que sustentam nossa credibilidade e respeito no mercado.</p>
+        <p>Contamos com uma equipe experiente e altamente qualificada, focada em um atendimento consultivo, ágil e personalizado. Mais do que vender consórcios, nosso compromisso é construir relações sólidas e duradouras, entregando soluções eficientes e evoluindo continuamente para gerar mais valor a cada cliente.</p>
+        <div class="about-list">
+          <div class="aitem">Imóveis e reforma</div>
+          <div class="aitem">Veículos leves e pesados</div>
+          <div class="aitem">Máquinas agrícolas</div>
+          <div class="aitem">Serviços diversos</div>
+          <div class="aitem">Capital de giro</div>
+          <div class="aitem">Frotas empresariais</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── SERVICES ─── -->
+<section id="servicos">
+  <div class="cont">
+    <div class="services-header">
+      <span class="s-tag anim">Nossos serviços</span>
+      <h2 class="s-title anim" style="text-align:center">O consórcio certo para <span>transformar planos em conquistas</span></h2>
+      <p class="s-desc anim">Oferecemos consórcios flexíveis e acessíveis para ajudar você a conquistar bens e serviços de forma segura.</p>
+    </div>
+    <div class="serv-grid">
+      <div class="scard anim delay-1">
+        <div class="scard-top-bar"></div>
+        <div class="scard-icon">🏠</div>
+        <h3>Imóveis</h3>
+        <p>Com um consórcio de imóveis, você pode conquistar sua casa própria, investir em imóveis ou reformar sem precisar pagar juros abusivos. Parcelas acessíveis e contemplação por sorteio ou lance.</p>
+        <button class="btn-scard" onclick="openFormModal('Imóvel')">Simular meu Consórcio Grátis</button>
+      </div>
+      <div class="scard anim delay-2">
+        <div class="scard-top-bar"></div>
+        <div class="scard-icon">🚗</div>
+        <h3>Veículos Leves e Pesados</h3>
+        <p>Seja um carro ou moto para o dia a dia, um caminhão para o seu negócio ou uma frota para sua empresa, o consórcio é a forma mais econômica de adquirir veículos.</p>
+        <button class="btn-scard" onclick="openFormModal('Carro')">Simular meu Consórcio Grátis</button>
+      </div>
+      <div class="scard anim delay-3">
+        <div class="scard-top-bar"></div>
+        <div class="scard-icon">🚜</div>
+        <h3>Máquinas Agrícolas</h3>
+        <p>Para quem trabalha no agronegócio, ter equipamentos modernos faz toda a diferença. Com o consórcio, você garante a renovação da sua frota de tratores, colheitadeiras e maquinários.</p>
+        <button class="btn-scard" onclick="openFormModal('Máquina Agrícola')">Simular meu Consórcio Grátis</button>
+      </div>
+      <div class="scard anim delay-4">
+        <div class="scard-top-bar"></div>
+        <div class="scard-icon">💡</div>
+        <h3>Serviços</h3>
+        <p>Planeje seus estudos, sua cirurgia estética, sua viagem dos sonhos ou qualquer outro serviço que deseja, pagando de forma acessível e sem juros. Realize com planejamento.</p>
+        <button class="btn-scard" onclick="openFormModal('Serviço')">Simular meu Consórcio Grátis</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── HOW IT WORKS ─── -->
+<section id="como">
+  <div class="cont">
+    <div class="como-head">
+      <span class="s-tag anim">Como funciona</span>
+      <h2 class="s-title anim" style="color:#fff">4 passos para <em style="color:var(--amarelo);font-style:normal">realizar seu sonho</em></h2>
+      <p class="s-desc anim" style="color:rgba(255,255,255,.7);margin:0 auto">Processo simples, transparente e totalmente acompanhado pela nossa equipe especializada.</p>
+    </div>
+    <div class="steps">
+      <div class="step anim delay-1">
+        <div class="step-num">1</div>
+        <h3>Escolha a modalidade e grupo ideal para você</h3>
+        <p>Encontre o consórcio que melhor se adapta às suas necessidades e faça parte de um grupo de pessoas com o mesmo objetivo.</p>
+      </div>
+      <div class="step anim delay-2">
+        <div class="step-num">2</div>
+        <h3>Pague parcelas mensais sem juros</h3>
+        <p>Todo mês, você contribui com uma parcela acessível, formando um fundo comum que será utilizado para contemplar os participantes.</p>
+      </div>
+      <div class="step anim delay-3">
+        <div class="step-num">3</div>
+        <h3>Participe das assembleias</h3>
+        <p>Em cada assembleia, acontecem sorteios e é possível dar lances, aumentando suas chances de ser contemplado mais rapidamente.</p>
+      </div>
+      <div class="step anim delay-4">
+        <div class="step-num">4</div>
+        <h3>Seja contemplado e realize seu sonho</h3>
+        <p>Ao ser contemplado, você recebe a carta de crédito e pode utilizá-la para adquirir seu bem ou serviço desejado, de forma planejada e segura.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── AUTHORITY ─── -->
+<section id="autoridade">
+  <div class="cont">
+    <div class="auth-grid">
+      <div class="anim from-left">
+        <span class="s-tag">Nossos Números</span>
+        <h2 class="s-title">Autoridade e <span>confiança</span> que o mercado reconhece</h2>
+        <p class="s-desc">Mais de 17 anos consolidando resultados e construindo relações de confiança com nossos clientes em todo o Brasil.</p>
+        <div class="auth-badges">
+          <div class="abadge">
+            <div class="abi">🔐</div>
+            Consórcio simples, prático e seguro
+          </div>
+          <div class="abadge">
+            <div class="abi">🏆</div>
+            Correspondente Credenciado Banco do Brasil
+          </div>
+          <div class="abadge">
+            <div class="abi">🚨</div>
+            +15 anos de Atuação no Mercado Financeiro
+          </div>
+          <div class="abadge">
+            <div class="abi">💰</div>
+            +100 milhões em consórcios vendidos
+          </div>
+        </div>
+        <div class="auth-cta-wrap">
+          <button class="btn-main" onclick="openFormModal('')">🚀 Simular meu Consórcio Grátis</button>
+        </div>
+      </div>
+      <div class="anim from-right">
+        <div class="stats-2x2">
+          <div class="stat-c">
+            <div class="si">🏅</div>
+            <div class="stat-num"><span class="counter" data-target="17">0</span>+</div>
+            <div class="stat-lbl">Anos no Mercado</div>
+          </div>
+          <div class="stat-c">
+            <div class="si">👥</div>
+            <div class="stat-num">100<span style="font-size:1.2rem">Mi</span>+</div>
+            <div class="stat-lbl">em Consórcios Vendidos</div>
+          </div>
+          <div class="stat-c">
+            <div class="si">🏦</div>
+            <div class="stat-num">BB</div>
+            <div class="stat-lbl">Correspondente Oficial</div>
+          </div>
+          <div class="stat-c">
+            <div class="si">⭐</div>
+            <div class="stat-num">100%</div>
+            <div class="stat-lbl">Atendimento Personalizado</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── FAQ ─── -->
+<section id="faq">
+  <div class="cont">
+    <div class="faq-wrap">
+      <div class="faq-sticky anim from-left">
+        <span class="s-tag">Dúvidas Frequentes</span>
+        <h2 class="s-title">Suas dúvidas <span>respondidas</span></h2>
+        <p class="s-desc">Tire todas as suas dúvidas sobre consórcio. Nossa equipe também está disponível para atendimento personalizado.</p>
+        <div style="margin-top:28px">
+          <button class="btn-main" onclick="openContactModal()">💬 Falar com consultor</button>
+        </div>
+      </div>
+      <div class="faq-list anim from-right">
+        <div class="fitem">
+          <div class="fq" onclick="toggleFaq(this)">
+            O que é o consórcio?
+            <span class="fq-arrow">▼</span>
+          </div>
+          <div class="fa-wrap"><div class="fa-inner">Consórcio é uma modalidade de compra baseada na união de pessoas — físicas ou jurídicas — em grupos, com o objetivo de formar uma poupança comum para aquisição de bens móveis, imóveis ou serviços. Esses grupos são administrados por empresas autorizadas e fiscalizadas pelo Banco Central do Brasil, garantindo segurança e transparência em todo o processo.</div></div>
+        </div>
+        <div class="fitem">
+          <div class="fq" onclick="toggleFaq(this)">
+            O que é uma administradora de consórcio?
+            <span class="fq-arrow">▼</span>
+          </div>
+          <div class="fa-wrap"><div class="fa-inner">É a empresa responsável por organizar, gerir e administrar os grupos de consórcio. Cabe à administradora garantir o funcionamento correto do grupo, realizar assembleias, conduzir sorteios, gerenciar os lances e assegurar que todas as regras estejam de acordo com a regulamentação do Banco Central.</div></div>
+        </div>
+        <div class="fitem">
+          <div class="fq" onclick="toggleFaq(this)">
+            O que é assembleia?
+            <span class="fq-arrow">▼</span>
+          </div>
+          <div class="fa-wrap"><div class="fa-inner">A assembleia é a reunião mensal dos participantes do consórcio. Nela são realizados os sorteios e a apuração dos lances, definindo quais consorciados serão contemplados naquele período.</div></div>
+        </div>
+        <div class="fitem">
+          <div class="fq" onclick="toggleFaq(this)">
+            O que é contemplação?
+            <span class="fq-arrow">▼</span>
+          </div>
+          <div class="fa-wrap"><div class="fa-inner">A contemplação é o momento em que o consorciado recebe o direito de utilizar a carta de crédito para adquirir o bem ou serviço desejado. Ela pode ocorrer por sorteio ou por lance, conforme as regras do grupo.</div></div>
+        </div>
+        <div class="fitem">
+          <div class="fq" onclick="toggleFaq(this)">
+            Como poderei ser contemplado?
+            <span class="fq-arrow">▼</span>
+          </div>
+          <div class="fa-wrap"><div class="fa-inner">Existem duas formas principais de contemplação: por sorteio, realizado mensalmente nas assembleias; e por lance, quando o consorciado antecipa parcelas para aumentar suas chances de contemplação. Ambas seguem critérios definidos pela administradora do consórcio.</div></div>
+        </div>
+        <div class="fitem">
+          <div class="fq" onclick="toggleFaq(this)">
+            O que é lance?
+            <span class="fq-arrow">▼</span>
+          </div>
+          <div class="fa-wrap"><div class="fa-inner">O lance é a antecipação de parcelas ofertada pelo consorciado com o objetivo de ser contemplado mais rapidamente. Geralmente, vence o maior lance dentro do grupo, conforme as regras estabelecidas em contrato.</div></div>
+        </div>
+        <div class="fitem">
+          <div class="fq" onclick="toggleFaq(this)">
+            É possível dar lances utilizando o FGTS?
+            <span class="fq-arrow">▼</span>
+          </div>
+          <div class="fa-wrap"><div class="fa-inner">Sim, em consórcios imobiliários é possível utilizar o saldo do FGTS para ofertar lances, desde que o consorciado atenda às regras estabelecidas pela Caixa Econômica Federal e pela administradora do consórcio.</div></div>
+        </div>
+        <div class="fitem">
+          <div class="fq" onclick="toggleFaq(this)">
+            Como funciona o sorteio?
+            <span class="fq-arrow">▼</span>
+          </div>
+          <div class="fa-wrap"><div class="fa-inner">O sorteio é realizado mensalmente durante as assembleias, garantindo igualdade de condições para todos os participantes do grupo. Ele define, de forma aleatória, quais consorciados serão contemplados naquele período, independentemente de lances.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── FOOTER ─── -->
+<footer>
+  <div class="footer-in">
+    <div class="footer-top">
+      <div>
+        <div class="ftl-brand">MAIS <span>BB</span></div>
+        <p class="ftl-desc">Martinelle & Avelar — Correspondente Bancário Banco do Brasil. Especialistas em consórcio com 17 anos de atuação no mercado.</p>
+        <div class="socials">
+          <a class="soc-btn" href="#" title="Instagram">📸</a>
+          <a class="soc-btn" href="#" title="Facebook">👍</a>
+          <a class="soc-btn" href="https://wa.me/5531971283485" target="_blank" title="WhatsApp">💬</a>
+        </div>
+      </div>
+      <div>
+        <div class="ft-head">Contatos</div>
+        <div class="fci"><span class="fi">📱</span><div><div style="font-size:.72rem;color:rgba(255,255,255,.45);margin-bottom:2px">Giovanni</div><a href="tel:+5531971283485">+55 31 97128-3485</a></div></div>
+        <div class="fci"><span class="fi">📱</span><div><div style="font-size:.72rem;color:rgba(255,255,255,.45);margin-bottom:2px">Pedro</div><a href="tel:+5531983265227">+55 31 98326-5227</a></div></div>
+        <div class="fci"><span class="fi">🕐</span><div>Segunda à Sexta<br>das 9h às 18h</div></div>
+        <div class="fci"><span class="fi">✉️</span><a href="mailto:consorcios.martinelle@gmail.com">consorcios.martinelle@gmail.com</a></div>
+        <div class="fci"><span class="fi">📍</span><div>Rua Dr. Pedro Luiz 559, Centro<br>Sete Lagoas, MG</div></div>
+      </div>
+      <div>
+        <div class="ft-head">Simule Agora</div>
+        <button class="btn-footer-cta" onclick="openFormModal('')">🚀 Simular meu Consórcio Grátis</button>
+        <div class="footer-map">
+          <iframe
+            src="https://maps.google.com/maps?q=Rua+Dr+Pedro+Luiz+559+Centro+Sete+Lagoas+MG+Brasil&output=embed&z=16"
+            width="100%" height="200" style="border:0;display:block" allowfullscreen loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade">
+          </iframe>
+        </div>
+      </div>
+    </div>
+    <hr class="footer-divider">
+    <div class="footer-bot">
+      <div class="footer-copy">Copyright © 2026 Mais BB Consórcios / Martinelle & Avelar — CNPJ 14.867.207/0001-72 · Todos os direitos reservados.</div>
+      <div style="color:rgba(255,255,255,.3);font-size:.72rem">Correspondente autorizado Banco do Brasil · Fiscalizado pelo Banco Central do Brasil</div>
+    </div>
+  </div>
+</footer>
+
+<!-- WhatsApp Float -->
+<a class="wa-float" href="https://wa.me/5531971283485?text=Olá!%20Gostaria%20de%20simular%20um%20consórcio." target="_blank" rel="noopener">
+  <div class="wa-ring"></div>
+  💬
+</a>
+
+<!-- ─── MODAL: FORM ─── -->
+<div class="modal-bg" id="formModal">
+  <div class="modal-box">
+    <div class="modal-head">
+      <h2>🚀 Simular meu Consórcio Grátis</h2>
+      <button class="m-close" onclick="closeModal('formModal')">✕</button>
+    </div>
+    <p style="font-size:.82rem;color:var(--muted);margin-bottom:20px">Preencha os dados abaixo e nossa equipe entrará em contato pelo WhatsApp.</p>
+    <form id="modalForm" onsubmit="handleSubmit(event,'modalForm')">
+      <div class="fgroup">
+        <label>Nome completo *</label>
+        <input class="fctl" id="m_nome" type="text" placeholder="Seu nome" required>
+      </div>
+      <div class="frow">
+        <div class="fgroup">
+          <label>E-mail *</label>
+          <input class="fctl" id="m_email" type="email" placeholder="seu@email.com" required>
+        </div>
+        <div class="fgroup">
+          <label>Telefone *</label>
+          <input class="fctl" id="m_tel" type="tel" placeholder="(31) 99999-9999" required>
+        </div>
+      </div>
+      <div class="fgroup">
+        <label>Tipo de bem *</label>
+        <select class="fctl" id="m_tipo" required>
+          <option value="">Selecione o tipo de bem</option>
+          <option value="Imóvel">🏠 Imóvel</option>
+          <option value="Carro">🚗 Carro</option>
+          <option value="Moto">🏍️ Moto</option>
+          <option value="Veículo Pesado / Caminhão">🚛 Veículo Pesado / Caminhão</option>
+          <option value="Máquina Agrícola">🚜 Máquina Agrícola</option>
+          <option value="Serviço">💡 Serviço</option>
+        </select>
+      </div>
+      <div class="valor-row">
+        <div class="fgroup">
+          <label>O que deseja simular? *</label>
+          <select class="fctl" id="m_valor_tipo" required>
+            <option value="">Selecione</option>
+            <option value="Valor do bem">Valor do bem</option>
+            <option value="Valor da prestação">Valor da prestação</option>
+          </select>
+        </div>
+        <div class="fgroup">
+          <label>Valor (R$) *</label>
+          <input class="fctl" id="m_valor" type="text" placeholder="Ex: R$ 150.000" required oninput="maskMoney(this)">
+        </div>
+      </div>
+      <div class="fgroup">
+        <label>Possui recurso para lance?</label>
+        <div class="radio-group">
+          <label class="radio-opt"><input type="radio" name="m_lance" value="Sim"> Sim</label>
+          <label class="radio-opt"><input type="radio" name="m_lance" value="Não" checked> Não</label>
+        </div>
+      </div>
+      <button class="btn-submit" type="submit" id="modalBtn">🚀 FAZER SIMULAÇÃO GRÁTIS</button>
+      <div class="form-sec">🔒 Seus dados estão seguros conosco</div>
+    </form>
+  </div>
+</div>
+
+<!-- ─── MODAL: CONTACT ─── -->
+<div class="modal-bg" id="contactModal">
+  <div class="modal-box" style="max-width:440px">
+    <div class="modal-head">
+      <h2>📞 Fale Conosco</h2>
+      <button class="m-close" onclick="closeModal('contactModal')">✕</button>
+    </div>
+    <div class="clist">
+      <div class="ci">
+        <div class="cci">📱</div>
+        <div>
+          <div class="ccl">Giovanni</div>
+          <div class="ccv"><a href="tel:+5531971283485">+55 31 97128-3485</a></div>
+        </div>
+      </div>
+      <div class="ci">
+        <div class="cci">📱</div>
+        <div>
+          <div class="ccl">Pedro</div>
+          <div class="ccv"><a href="tel:+5531983265227">+55 31 98326-5227</a></div>
+        </div>
+      </div>
+      <div class="ci">
+        <div class="cci">✉️</div>
+        <div>
+          <div class="ccl">E-mail</div>
+          <div class="ccv"><a href="mailto:consorcios.martinelle@gmail.com">consorcios.martinelle@gmail.com</a></div>
+        </div>
+      </div>
+      <div class="ci">
+        <div class="cci">🕐</div>
+        <div>
+          <div class="ccl">Horário</div>
+          <div class="ccv">Segunda à Sexta, 9h às 18h</div>
+        </div>
+      </div>
+      <div class="ci">
+        <div class="cci">📍</div>
+        <div>
+          <div class="ccl">Endereço</div>
+          <div class="ccv">Rua Dr. Pedro Luiz 559, Centro<br>Sete Lagoas, MG</div>
+        </div>
+      </div>
+    </div>
+    <button class="cta-modal" onclick="closeModal('contactModal');openFormModal('')">🚀 Fazer Simulação Grátis</button>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+  // ─── CONFIG ───
+  const SPREADSHEET_ID = '1yrh2DfAxz2YxjihdFpAUEv7cUGHn29FfT9N_2_9bfcM';
+  const CLIENT_EMAIL = 'sheets-cadastro-site-consorcio@sheets-cadastro-site-consorcio.iam.gserviceaccount.com';
+  // NOTE: If your Google Sheets tab is named differently (e.g. "Página1"), update the SHEET_NAME below.
+  const SHEET_NAME = 'Sheet1';
+  const PRIVATE_KEY = `-----BEGIN PRIVATE KEY-----
+MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQC/dOLDkTj3np0D
+dOSnWwhrCynIjhefPvp1jOvnb/7Zs98oJajvPAENWzu9HuOPCzgBv9HcmBUud3EJ
+MeCSkmKR/1iw5wy6X57wYRHI1LFBchEywleXQdtAjpcgKgLcS9rVLw/HhVPgPv0Y
+mVcN+xiKftZpSp6JG1TZ/cA/I95YJyT0rxYumiJDouudsRYtCltcYrKTQ95nYUeb
+GgkYr8ZLeCyPCQo8JB6UdZUTqqotBRcjkXeRjHgdewwTJoc74GKLVsXm0pmct04f
+stSnGaRrhx4RSXOm/tMlbGmDG7YVjy5IPWoAftc+zDNNtmEVUk7q4U3tqGKZmBDT
+U63jIbeVAgMBAAECggEAHGvM1OTMPOAIJXD3F4vpOEDAO2QyiAKImiYpB+KFhcpQ
+nIxYo2j4LAQo3laFR+ENt57C19kgvdTfzBJiKMf/x3YNM7ec2VbkCIGUawh95r34
+5RzZ9VuCoXb5Yr4xzgOZsO9rS35UmPOozTvII0xs1HRnPlqkJazPwAuN/CGGOnYV
+MGBwK4myuuPwdLdubgs8CLTTt6gAzizCXHc18QcqQguAUSaVSwocRCAsG+Af+71K
+SRIgkty9yoEYemfdebGuSuFftJDH0yy0wnKYdUJIb0FfRDVF8HeQgkCN9Tpz7Pf/
+QtE/A6Hc0KtXvVGA8hzgvuj8Sk82v8kY/l0Kuq1bQQKBgQDwRVKOZI0iPIclUBc4
+GN9pZvS8DuW9zt0zohCRstRmtQTXBtAfGZ932i7vRn3CxFzgFR7yjKE2t5WIveFu
+QCD7HdbHW2uae6UNlshzjDCZMILmJxiyVQ4WvZPJdjAkuYYwxwNaBUNlbtBF+T62
+OMYsM5+aVWpVCK7o7TQrRx4b1QKBgQDL/X2AFidVSDKcyFF3yOE38RQJpcl0oXKf
+3S6VmztJPeXcn3rQ8wz5jqEv6HGHAV5OPhWJP9p/AwaLOHk/ffULgxzDS0u5qypD
+32SYl21iQyVcKp5f2PuExs+WZHfqLwVYqRk6L23FYlSbWg1/Y1uBQpu1hWAU67eN
+u/RQT73MwQKBgHOyjexvUt63ksRO6r9iisIwh4y/B7X8lNu2IJBoMos6g5gfebxg
+FEAcWhlyMkDFWYu13+8f9MlqYaE0/gae7sK9PZ1F0mzTOUlv4Bpz2TsK9x1omiXV
+ezFMHIwYU1p707hNPLnuauO/Fp97Q81vTU4fla01kDxeMAuNnV9xoXf5AoGBAJVf
+nCTNFCRY5+bysOVcDb+fIyMlaW2kQ4FYv6IBt9ocH1P83DxhniCoFtQ0C93mXJ5C
+zBZi0aasGoCb6/1YSLYTXl6LpnnhIuPsk4dBa3HG5XamJq7c/uDtjFj+XOj5YZrY
+yIZY8LLXHEleGgAsS3dNxSOY9RCcwx5ggbjFi6CBAoGBAOUwwj5EA3U8EPAIdVQj
+WvjRvCKGytVXVZwZ3oyIJXrW6Xc2Jz1PM/rR1Soyc/5AE1pjFaYBKydseInYoP9V
+iZ9ELvtJReSL+68ojDFiYsv6dK7stD8HB2WsXaT84SpHJiCCxJLXdltohX7V+0Ca
+d7sgLhS+Psp+Q8d0xxHCN5ld
+-----END PRIVATE KEY-----`;
+
+  // ─── GOOGLE SHEETS JWT AUTH ───
+  function b64url(data) {
+    let binary = '';
+    const bytes = (typeof data === 'string') ? new TextEncoder().encode(data) : data;
+    bytes.forEach(b => binary += String.fromCharCode(b));
+    return btoa(binary).replace(/\+/g,'-').replace(/\//g,'_').replace(/=/g,'');
+  }
+
+  function pemToBuffer(pem) {
+    const b64 = pem.replace(/-----BEGIN PRIVATE KEY-----|-----END PRIVATE KEY-----|\n|\r/g,'');
+    const bin = atob(b64);
+    const buf = new Uint8Array(bin.length);
+    for (let i=0;i<bin.length;i++) buf[i]=bin.charCodeAt(i);
+    return buf.buffer;
+  }
+
+  async function getAccessToken() {
+    const now = Math.floor(Date.now()/1000);
+    const header  = b64url(JSON.stringify({alg:'RS256',typ:'JWT'}));
+    const payload = b64url(JSON.stringify({
+      iss: CLIENT_EMAIL,
+      scope: 'https://www.googleapis.com/auth/spreadsheets',
+      aud: 'https://oauth2.googleapis.com/token',
+      exp: now+3600, iat: now
+    }));
+    const sigInput = `${header}.${payload}`;
+    const key = await crypto.subtle.importKey(
+      'pkcs8', pemToBuffer(PRIVATE_KEY),
+      {name:'RSASSA-PKCS1-v1_5', hash:'SHA-256'}, false, ['sign']
+    );
+    const sigBuf = await crypto.subtle.sign('RSASSA-PKCS1-v1_5', key, new TextEncoder().encode(sigInput));
+    const jwt = `${sigInput}.${b64url(new Uint8Array(sigBuf))}`;
+    const res = await fetch('https://oauth2.googleapis.com/token',{
+      method:'POST',
+      headers:{'Content-Type':'application/x-www-form-urlencoded'},
+      body:`grant_type=urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Ajwt-bearer&assertion=${jwt}`
+    });
+    const data = await res.json();
+    return data.access_token;
+  }
+
+  async function appendToSheets(row) {
+    const token = await getAccessToken();
+    const range = `${SHEET_NAME}!A:I`;
+    const res = await fetch(
+      `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${encodeURIComponent(range)}:append?valueInputOption=USER_ENTERED`,
+      {
+        method:'POST',
+        headers:{'Authorization':`Bearer ${token}`,'Content-Type':'application/json'},
+        body: JSON.stringify({values:[row]})
+      }
+    );
+    if(!res.ok) {
+      const err = await res.json();
+      // If Sheet1 not found, try Página1
+      if(err.error && err.error.message && err.error.message.includes('Unable to parse range')) {
+        const range2 = `Página1!A:I`;
+        const res2 = await fetch(
+          `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/${encodeURIComponent(range2)}:append?valueInputOption=USER_ENTERED`,
+          {
+            method:'POST',
+            headers:{'Authorization':`Bearer ${token}`,'Content-Type':'application/json'},
+            body: JSON.stringify({values:[row]})
+          }
+        );
+        if(!res2.ok) throw new Error('Sheets error');
+        return;
+      }
+      throw new Error('Sheets error');
+    }
+  }
+
+  // ─── FORM HANDLING ───
+  function getFormData(prefix) {
+    const lance = document.querySelector(`input[name="${prefix}_lance"]:checked`);
+    return {
+      nome:       document.getElementById(`${prefix}_nome`)?.value || document.getElementById(`${prefix.replace('hero','h').replace('modal','m')}_nome`)?.value || '',
+      email:      document.getElementById(`${prefix}_email`)?.value || '',
+      tel:        document.getElementById(`${prefix}_tel`)?.value || '',
+      tipo:       document.getElementById(`${prefix}_tipo`)?.value || '',
+      valor_tipo: document.getElementById(`${prefix}_valor_tipo`)?.value || '',
+      valor:      document.getElementById(`${prefix}_valor`)?.value || '',
+      lance:      lance ? lance.value : 'Não'
+    };
+  }
+
+  function collectForm(formId) {
+    const p = formId === 'heroForm' ? 'h' : 'm';
+    const lance = document.querySelector(`input[name="${p}_lance"]:checked`);
+    return {
+      nome:       document.getElementById(`${p}_nome`).value.trim(),
+      email:      document.getElementById(`${p}_email`).value.trim(),
+      tel:        document.getElementById(`${p}_tel`).value.trim(),
+      tipo:       document.getElementById(`${p}_tipo`).value,
+      valor_tipo: document.getElementById(`${p}_valor_tipo`).value,
+      valor:      document.getElementById(`${p}_valor`).value.trim(),
+      lance:      lance ? lance.value : 'Não'
+    };
+  }
+
+  async function handleSubmit(e, formId) {
+    e.preventDefault();
+    const btnId = formId === 'heroForm' ? 'heroBtn' : 'modalBtn';
+    const btn = document.getElementById(btnId);
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span> Enviando...';
+
+    try {
+      const d = collectForm(formId);
+      const row = [
+        d.nome, d.email, d.tel, d.tipo,
+        d.valor_tipo, d.valor, d.lance,
+        new Date().toLocaleString('pt-BR'),
+        window.location.origin
+      ];
+      await appendToSheets(row);
+      showToast('✅ Simulação enviada com sucesso!', 'ok');
+      setTimeout(() => { window.location.href = 'obrigado.html'; }, 800);
+    } catch(err) {
+      console.error(err);
+      // Even if sheets fails, redirect (don't block the lead)
+      showToast('Redirecionando...', 'ok');
+      setTimeout(() => { window.location.href = 'obrigado.html'; }, 800);
+    }
+  }
+
+  // ─── MONEY MASK ───
+  function maskMoney(el) {
+    let v = el.value.replace(/\D/g,'');
+    if(!v) { el.value=''; return; }
+    v = (parseInt(v)/100).toFixed(2);
+    el.value = 'R$ ' + parseFloat(v).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
+  }
+
+  // ─── MODALS ───
+  function openFormModal(tipo) {
+    document.getElementById('formModal').classList.add('open');
+    document.body.style.overflow='hidden';
+    if(tipo) {
+      const sel = document.getElementById('m_tipo');
+      if(sel) sel.value = tipo;
+    }
+  }
+  function openContactModal() {
+    document.getElementById('contactModal').classList.add('open');
+    document.body.style.overflow='hidden';
+  }
+  function closeModal(id) {
+    document.getElementById(id).classList.remove('open');
+    document.body.style.overflow='';
+  }
+  // Close on bg click
+  document.querySelectorAll('.modal-bg').forEach(m=>{
+    m.addEventListener('click',e=>{ if(e.target===m) { m.classList.remove('open'); document.body.style.overflow=''; }});
+  });
+
+  // ─── NAV ───
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll',()=>{ navbar.classList.toggle('scrolled', window.scrollY>40); });
+
+  function focusHeroForm(e) {
+    e.preventDefault();
+    document.getElementById('hero').scrollIntoView({behavior:'smooth'});
+    setTimeout(()=>{ const f=document.getElementById('h_nome'); if(f) f.focus(); }, 600);
+  }
+
+  // ─── MOBILE MENU ───
+  function openMobileMenu() { document.getElementById('mobileNav').classList.add('open'); document.body.style.overflow='hidden'; }
+  function closeMobileMenu() { document.getElementById('mobileNav').classList.remove('open'); document.body.style.overflow=''; }
+
+  // ─── FAQ ───
+  function toggleFaq(el) {
+    const item = el.parentElement;
+    const wasOpen = item.classList.contains('open');
+    document.querySelectorAll('.fitem.open').forEach(i=>{ i.classList.remove('open'); i.querySelector('.fa-wrap').style.maxHeight='0'; });
+    if(!wasOpen) {
+      item.classList.add('open');
+      item.querySelector('.fa-wrap').style.maxHeight = item.querySelector('.fa-inner').scrollHeight + 'px';
+    }
+  }
+
+  // ─── TOAST ───
+  function showToast(msg, type='') {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className = 'toast ' + type;
+    t.classList.add('show');
+    setTimeout(()=>t.classList.remove('show'), 3500);
+  }
+
+  // ─── SCROLL ANIMATIONS ───
+  const observer = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting) { e.target.classList.add('visible'); } });
+  }, { threshold:.12, rootMargin:'0px 0px -40px 0px' });
+  document.querySelectorAll('.anim').forEach(el=>observer.observe(el));
+
+  // ─── COUNTER ANIMATION ───
+  function animateCounter(el) {
+    const target = parseInt(el.dataset.target);
+    let current = 0;
+    const step = target / 40;
+    const timer = setInterval(()=>{
+      current = Math.min(current+step, target);
+      el.textContent = Math.floor(current);
+      if(current >= target) clearInterval(timer);
+    }, 40);
+  }
+  const counterObs = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting) { animateCounter(e.target); counterObs.unobserve(e.target); }});
+  }, {threshold:.5});
+  document.querySelectorAll('.counter').forEach(el=>counterObs.observe(el));
+
+  // ─── ESC KEY ───
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape') { document.querySelectorAll('.modal-bg.open').forEach(m=>{ m.classList.remove('open'); document.body.style.overflow=''; }); }});
+</script>
+</body>
+</html>
