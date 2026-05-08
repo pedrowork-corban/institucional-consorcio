@@ -153,7 +153,70 @@ function maskPhone(el) {
   el.value = v;
 }
 
-// === FORM SUBMIT === async function handleSimSubmit(e) { e.preventDefault(); const form = e.target; const data = { nome: form.querySelector('#m_nome').value, email: form.querySelector('#m_email').value, telefone: form.querySelector('#m_tel').value, cidade: form.querySelector('#m_cidade').value, lance: form.querySelector('#m_lance').value, categoria: selectedCategory, modo: simMode, valor: slider.value }; try { const response = await fetch( 'https://script.google.com/macros/s/AKfycbww9xx0xnDhQqiTM3SVA1gbmmlLfySXuXaAOKHNe0ILl8zEuQ8Yv0zaLTQip4oXb4Pc/exec', { method: 'POST', body: JSON.stringify(data) } ); const result = await response.json(); if (result.success) { showToast( 'Simulação enviada com sucesso! Entraremos em contato.', 'ok' ); closeSimModal(); form.reset(); } else { showToast( 'Erro ao enviar.', 'err' ); } } catch (error) { console.error(error); showToast( 'Erro de conexão.', 'err' ); } }
+```javascript id="vsmn4z"
+
+// === FORM SUBMIT ===
+async function handleSimSubmit(e) {
+
+  e.preventDefault();
+
+  const form = e.target;
+
+  const data = {
+    nome: form.querySelector('#m_nome').value,
+    email: form.querySelector('#m_email').value,
+    telefone: form.querySelector('#m_tel').value,
+    cidade: form.querySelector('#m_cidade').value,
+    lance: form.querySelector('#m_lance').value,
+    categoria: selectedCategory,
+    modo: simMode,
+    valor: slider.value
+  };
+
+  try {
+
+    const response = await fetch(
+      'https://script.google.com/macros/s/AKfycbww9xx0xnDhQqiTM3SVA1gbmmlLfySXuXaAOKHNe0ILl8zEuQ8Yv0zaLTQip4oXb4Pc/exec',
+      {
+        method: 'POST',
+        body: JSON.stringify(data)
+      }
+    );
+
+    const result = await response.json();
+
+    if (result.success) {
+
+      showToast(
+        'Simulação enviada com sucesso! Entraremos em contato.',
+        'ok'
+      );
+
+      closeSimModal();
+
+      form.reset();
+
+    } else {
+
+      showToast(
+        'Erro ao enviar.',
+        'err'
+      );
+
+    }
+
+  } catch (error) {
+
+    console.error(error);
+
+    showToast(
+      'Erro de conexão.',
+      'err'
+    );
+
+  }
+}
+```
 // === FAQ ===
 function toggleFaq(el) {
   const item = el.closest('.fitem');
